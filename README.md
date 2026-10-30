@@ -47,7 +47,7 @@ python -m pytest -q
 
 `fetch` pulls the statement list from the Federal Reserve's meeting calendar and verifies each URL against the listed meeting date. Raw responses are cached with SHA-256 hashes under `output/source_cache`. `import` refuses any annotation whose statement text no longer matches its recorded hash.
 
-To reclassify yourself instead of importing the recorded run: `export ANTHROPIC_API_KEY=...` and use `--mode extract`.
+To reclassify yourself instead of importing the recorded run, use a fresh database (scoring refuses to mix models) and run `export ANTHROPIC_API_KEY=...`, then `python main.py --mode fetch --db output/fomc_api.db` and `python main.py --mode extract --db output/fomc_api.db`, followed by `score` and `analyze` on that database. Invalid answers are retried up to three times, and `rate_action` is cross-checked against the statements' target ranges exactly as in the recorded run. Expect the numbers above to move with a different model.
 
 ## Modes
 

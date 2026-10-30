@@ -10,6 +10,7 @@ import json
 import math
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 import analyze
@@ -153,6 +154,45 @@ class StorageAndAlignmentTests(unittest.TestCase):
             out = analyze.run_alignment(self.conn, "FOMC", "real", str(Path(tmp) / "r.md"))
         self.assertEqual(out["n_matched"], 5)
         self.assertTrue(math.isclose(out["delta_rho"], 1.0), out["delta_rho"])
+
+
+class ApiPathTests(unittest.TestCase):
+    """The API path must behave like the recorded run: retry invalid output, fix rate size."""
+
+    def test_invalid_answer_is_retried_and_wrong_rate_size_is_corrected(self):
+        conn = db.connect(":memory:")
+        db.init_db(conn)
+        prior = "Inflation remains elevated. The Committee decided to raise the target range for the federal funds rate to 2-1/4 to 2-1/2 percent and"
+        later = "Inflation remains elevated. The Committee decided to raise the target range for the federal funds rate to 3 to 3-1/4 percent and"
+        for day, text in (("2022-07-27", prior), ("2022-09-21", later)):
+            db.upsert_statement(conn, "FOMC", day, text, is_synthetic=False)
+
+        def answer(rate):
+            rec = record("elevated")
+            rec["rate_action"] = rate
+            rec["quotes"] = {f: "Inflation remains elevated." for f in rec["quotes"]}
+            rec["quotes"]["balance_sheet"] = rec["quotes"]["forward_guidance"] = ""
+            rec["quotes"]["dissent_direction"] = ""
+            return json.dumps(rec)
+
+        # 2022-07-27 answers once; 2022-09-21 first gives an off-menu value, then a wrong size.
+        replies = iter([answer("hike_50plus"), answer("hike_75"), answer("hike_25")])
+        with mock.patch.object(extract, "_call_claude", side_effect=lambda *a: next(replies)) as call:
+            self.assertEqual(extract.extract_all(conn), 2)
+        self.assertEqual(call.call_count, 3)
+        stored = {r["date"]: json.loads(r["record_json"]) for r in conn.execute(
+            "SELECT s.date, e.record_json FROM extractions e JOIN statements s ON s.id=e.statement_id")}
+        self.assertEqual(stored["2022-09-21"]["rate_action"], "hike_50plus")   # 75bp, not hike_25
+
+    def test_gives_up_loudly_after_repeated_invalid_answers(self):
+        conn = db.connect(":memory:")
+        db.init_db(conn)
+        text = "Inflation remains elevated. The Committee decided to maintain the target range for the federal funds rate at 0 to 1/4 percent."
+        db.upsert_statement(conn, "FOMC", "2021-03-17", text, is_synthetic=False)
+        with mock.patch.object(extract, "_call_claude", return_value="not json"):
+            with self.assertRaisesRegex(ValueError, "after 3 attempts"):
+                extract.extract_all(conn)
+        self.assertEqual(conn.execute("SELECT COUNT(*) FROM extractions").fetchone()[0], 0)
 
 
 if __name__ == "__main__":

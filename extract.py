@@ -124,7 +124,12 @@ def _call_claude(prompt, model):
     return "".join(block.get("text", "") for block in payload.get("content", []))
 
 
-def extract_statement(conn, statement_row, model=MODEL):
+def extract_statement(conn, statement_row, model=MODEL, derived=None, attempts=3):
+    """Classify one statement. Retries only on invalid output, never on a label.
+
+    ``derived`` maps date -> rate action computed from the statements' own target
+    ranges; on disagreement it replaces the model's value and the override is stored.
+    """
     if statement_row["is_synthetic"] or statement_row["source"] != "FOMC":
         raise ValueError("LLM extraction requires real FOMC text")
     text = statement_row["text"]
@@ -132,12 +137,26 @@ def extract_statement(conn, statement_row, model=MODEL):
     cached = db.get_cached_extraction(conn, statement_row["id"], key)
     if cached is not None:
         return validate_extraction(cached, text)
-    raw = _call_claude(build_prompt(text), model)
-    record = validate_extraction(_parse_json(raw), text)
+    last_error = None
+    for _ in range(attempts):
+        raw = _call_claude(build_prompt(text), model)
+        try:
+            record = validate_extraction(_parse_json(raw), text)
+            break
+        except ValueError as exc:      # includes malformed JSON
+            last_error = exc
+    else:
+        raise ValueError(f"No valid extraction for {statement_row['date']} after "
+                         f"{attempts} attempts: {last_error}")
+    provenance = {"provider": "Anthropic Messages API", "outcome_blind": True}
+    want = (derived or {}).get(statement_row["date"])
+    if want is not None and record["rate_action"] != want:
+        provenance["rate_action_override"] = {"model": record["rate_action"], "derived": want}
+        record = {**record, "rate_action": want}
     db.save_extraction(conn, statement_row["id"], key, model, SCHEMA_VERSION,
                        raw, record, datetime.datetime.now(datetime.timezone.utc).isoformat(),
                        text_sha256=text_hash(text), prompt_version=PROMPT_VERSION,
-                       provenance={"provider": "Anthropic Messages API", "outcome_blind": True})
+                       provenance=provenance)
     return record
 
 
@@ -145,8 +164,9 @@ def extract_all(conn, model=MODEL):
     statements = db.get_statements(conn, source="FOMC")
     if not statements:
         raise ValueError("No real statements to extract")
+    derived = derive_rate_actions(statements)
     for row in statements:
-        extract_statement(conn, row, model=model)
+        extract_statement(conn, row, model=model, derived=derived)
     return len(statements)
 
 
