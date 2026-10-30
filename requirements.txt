@@ -3,7 +3,8 @@ scipy>=1.10        # Spearman rank correlation
 # Testing
 hypothesis>=6.0    # property-based tests
 pytest>=7.0
-# Online fetching only (fetch.py --online); the offline + synthetic paths don't need it
+# Official source fetching and structural HTML parsing
 requests>=2.28
+beautifulsoup4>=4.12
 # Note: the LLM call in extract.py uses only the Python standard library
 # (urllib) and reads ANTHROPIC_API_KEY from the environment. No SDK required.

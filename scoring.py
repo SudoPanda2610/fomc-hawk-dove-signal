@@ -183,7 +183,9 @@ def delta_index(prev_record, curr_record):
     expect to relate (noisily, with caveats) to the move in rates around the
     meeting.
     """
-    return record_to_index(curr_record) - record_to_index(prev_record)
+    # Equal true changes must be exactly equal: float noise (~1e-16) would otherwise
+    # break ties in rank correlations and misclassify zero/sign comparisons.
+    return round(record_to_index(curr_record) - record_to_index(prev_record), 12)
 
 
 def describe_change(prev_record, curr_record):

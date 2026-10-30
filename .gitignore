@@ -7,6 +7,8 @@ venv/
 *.db
 *.sqlite
 *.sqlite3
+output/
 results_*.md
+!results/results_real.md
 .env
 .DS_Store

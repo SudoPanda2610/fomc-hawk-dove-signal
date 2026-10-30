@@ -1,202 +1,269 @@
-"""
-analyze.py
-==========
+"""Complete-source scoring and descriptive same-day daily-yield associations.
 
-Two jobs:
-
-  score_all()      walk the statements in date order, compute each one's index
-                   and its change vs the prior statement, and store both.
-
-  run_alignment()  the actual question -- does the hawkish/dovish signal line up
-                   with the move in the 2-year Treasury yield around the meeting?
-
-IMPORTANT FRAMING (this is the honest part, and the part an interviewer will push
-on, so I write it into the output itself):
-
-  * The next-day yield move reflects the SURPRISE relative to what markets already
-    expected, not the absolute stance. So my LEVEL index should relate only weakly
-    to the move. My CHANGE signal (delta_index) is a rough surprise proxy and
-    should relate more.
-  * N is tiny (~8 meetings/year). These are DESCRIPTIVE associations, not a
-    validated predictor. I report sign-agreement and rank correlation, with
-    p-values shown but not leaned on.
-  * The statement is only part of the information set -- the press conference and
-    projections move rates too. I score only the statement, on purpose.
-
-The yield-move definitions:
-  prior  = last available yield strictly BEFORE the statement date
-  same   = yield ON the statement date (FOMC releases at 2pm, so the close already
-           contains most of the reaction)
-  next   = first available yield AFTER the statement date
-  dy_same = same - prior      dy_next = next - prior
+Every statement must have a text-bound extraction from one model/schema before
+scoring. Real and synthetic yields are never mixed. A usable yield window is a
+weekday statement date with an observed same-day DGS2 and the latest preceding
+DGS2 observation no more than seven calendar days earlier. No next-day fallback.
 """
 
 import datetime
+import json
+import math
+from bisect import bisect_left
+from collections import Counter
+from pathlib import Path
 
 from scipy.stats import spearmanr
 
 import db
-from scoring import SCORED_FIELDS, index_of, delta_index, change_vector
+from scoring import SCHEMA_VERSION, change_vector, delta_index, index_of
+
+MAX_PRIOR_GAP_DAYS = 7
 
 
-# ---- scoring driver --------------------------------------------------------
-
-def _record_for(conn, statement_id):
-    """Fetch the stored record for a statement (real LLM cache OR synthetic)."""
-    row = conn.execute(
-        "SELECT record_json FROM extractions WHERE statement_id=? "
-        "ORDER BY created_at DESC LIMIT 1",
-        (statement_id,),
-    ).fetchone()
-    if row is None:
-        return None
-    import json
-    return json.loads(row["record_json"])
+def _extractions(conn, source):
+    statements = db.get_statements(conn, source)
+    if not statements:
+        raise ValueError(f"No statements for {source}; fetch or generate them first")
+    selected = []
+    for statement in statements:
+        if statement["is_synthetic"] != db.source_flag(source):
+            raise ValueError("statement source/is_synthetic mismatch")
+        row = conn.execute("SELECT * FROM extractions WHERE statement_id=? "
+                           "ORDER BY created_at DESC, rowid DESC LIMIT 1",
+                           (statement["id"],)).fetchone()
+        if row is None:
+            raise ValueError(f"Missing extraction for {source} {statement['date']}; complete all statements before scoring")
+        digest = db.text_digest(statement["text"])
+        if row["text_sha256"] != digest:
+            raise ValueError(f"Extraction text hash missing or stale for {statement['date']}; re-extract or import")
+        if source == "FOMC":
+            if not row["model"].strip() or row["model"].upper() == "SYNTHETIC":
+                raise ValueError("Real scoring requires a real extraction model, not SYNTHETIC")
+            if row["schema_version"] != SCHEMA_VERSION:
+                raise ValueError(f"Real scoring requires schema {SCHEMA_VERSION}")
+        elif row["model"] != "SYNTHETIC" or row["schema_version"] != "synthetic":
+            raise ValueError("Synthetic scoring requires SYNTHETIC model/synthetic schema")
+        record = json.loads(row["record_json"])
+        # index_of validates all six categorical scoring fields before any writes.
+        index = index_of(record)
+        selected.append((statement, row, record, index))
+    versions = {(row["model"], row["schema_version"]) for _, row, _, _ in selected}
+    if len(versions) != 1:
+        raise ValueError("Mixed extraction model/schema; re-extract the complete source consistently")
+    return selected
 
 
 def score_all(conn, source):
-    """Compute and store index + delta + change vector for each statement that
-    has an extraction. Returns how many were scored."""
-    statements = db.get_statements(conn, source=source)
-    prev_id, prev_rec = None, None
-    scored = 0
-    for s in statements:
-        rec = _record_for(conn, s["id"])
-        if rec is None:
-            # no extraction yet (e.g. real text but no API key) -- skip quietly
-            continue
-        idx = index_of(rec)
-        if prev_rec is None:
-            db.save_score(conn, s["id"], idx, None, None, None)
-        else:
-            d = delta_index(prev_rec, rec)
-            cv = change_vector(prev_rec, rec)
-            db.save_score(conn, s["id"], idx, prev_id, d, cv)
-        prev_id, prev_rec = s["id"], rec
-        scored += 1
-    return scored
+    """Atomically replace a source's scores, never bridging an extraction gap."""
+    db.source_flag(source)
+    conn.execute("SAVEPOINT score_source")
+    try:
+        selected = _extractions(conn, source)
+        db._invalidate_scores(conn, source)
+        previous_id = previous_record = None
+        for statement, extraction, record, index in selected:
+            delta = delta_index(previous_record, record) if previous_record is not None else None
+            changes = change_vector(previous_record, record) if previous_record is not None else None
+            db.save_score(conn, statement["id"], index, previous_id, delta, changes,
+                          extraction_cache_key=extraction["cache_key"], model=extraction["model"],
+                          schema_version=extraction["schema_version"], text_sha256=extraction["text_sha256"],
+                          commit=False)
+            previous_id, previous_record = statement["id"], record
+    except Exception:
+        conn.execute("ROLLBACK TO score_source")
+        conn.execute("RELEASE score_source")
+        raise
+    conn.execute("RELEASE score_source")
+    return len(selected)
 
 
-# ---- yield lookup helpers --------------------------------------------------
-
-def _load_yields(conn):
-    rows = conn.execute(
-        "SELECT date, dgs2 FROM yields WHERE dgs2 IS NOT NULL ORDER BY date"
-    ).fetchall()
-    return [(r["date"], r["dgs2"]) for r in rows]
-
-
-def _yield_window(yields, statement_date):
-    """Return (prior, same, next) 2y yields around a statement date, or Nones
-    where unavailable. `yields` is a sorted list of (iso_date, value)."""
-    prior = same = nxt = None
-    for d, v in yields:
-        if d < statement_date:
-            prior = v            # keep advancing -> ends on last before date
-        elif d == statement_date:
-            same = v
-        elif d > statement_date:
-            nxt = v              # first one after
-            break
-    return prior, same, nxt
+def _load_yields(conn, source):
+    rows = conn.execute("SELECT date,dgs2,dgs10 FROM yields WHERE is_synthetic=? ORDER BY date",
+                        (db.source_flag(source),)).fetchall()
+    for row in rows:
+        datetime.date.fromisoformat(row["date"])
+        for key in ("dgs2", "dgs10"):
+            if row[key] is not None and not math.isfinite(row[key]):
+                raise ValueError(f"Nonfinite {key} for {row['date']}")
+    return rows
 
 
-# ---- the alignment analysis ------------------------------------------------
+def _spearman(xs, ys):
+    if len(xs) < 3 or len(set(xs)) < 2 or len(set(ys)) < 2:
+        return None, None
+    rho, p = spearmanr(xs, ys)
+    return (float(rho) if math.isfinite(rho) else None,
+            float(p) if math.isfinite(p) else None)
+
 
 def run_alignment(conn, source, label, out_path):
-    """Compute level/change vs yield-move associations and write a short report.
-    Returns a dict of the headline numbers (also useful for the tests/demo)."""
-    yields = _load_yields(conn)
+    """Write Markdown plus strict JSON containing every included/excluded event."""
+    flag = db.source_flag(source)
+    rows = conn.execute("""SELECT s.*, sc.index_value, sc.delta_index,
+        sc.prior_statement_id, sc.change_vector_json, sc.extraction_cache_key,
+        sc.model AS score_model, sc.schema_version AS score_schema,
+        sc.text_sha256 AS score_text_sha256,
+        p.date AS prior_statement_date
+        FROM statements s JOIN scores sc ON sc.statement_id=s.id
+        LEFT JOIN statements p ON p.id=sc.prior_statement_id
+        WHERE s.source=? ORDER BY s.date""", (source,)).fetchall()
+    if not rows:
+        raise ValueError(f"No scores for {source}; complete extraction and scoring first")
+    selected = _extractions(conn, source)
+    if len(rows) != len(selected):
+        raise ValueError("Incomplete source scores; rerun score_all")
+    extraction_by_id = {s["id"]: (e, record) for s, e, record, _ in selected}
+    previous_id = None
+    for row in rows:
+        extraction, _ = extraction_by_id[row["id"]]
+        if (row["is_synthetic"] != flag or row["prior_statement_id"] != previous_id
+                or row["score_text_sha256"] != db.text_digest(row["text"])
+                or row["extraction_cache_key"] != extraction["cache_key"]
+                or row["score_model"] != extraction["model"]
+                or row["score_schema"] != extraction["schema_version"]):
+            raise ValueError("Stale or inconsistent score provenance; rerun score_all")
+        if not math.isfinite(row["index_value"]) or (row["delta_index"] is not None and not math.isfinite(row["delta_index"])):
+            raise ValueError("Scores must be finite")
+        previous_id = row["id"]
 
-    # pull each scored statement with its date
-    rows = conn.execute(
-        "SELECT s.date AS date, sc.index_value AS idx, sc.delta_index AS delta "
-        "FROM scores sc JOIN statements s ON s.id = sc.statement_id "
-        "WHERE s.source=? ORDER BY s.date",
-        (source,),
-    ).fetchall()
-
-    levels, deltas, dy_same_l, dy_next_l = [], [], [], []
-    matched = 0
-    for r in rows:
-        prior, same, nxt = _yield_window(yields, r["date"])
-        if prior is None or (same is None and nxt is None):
-            continue  # can't form a move for this date
-        ref_same = same if same is not None else nxt
-        dy_same = ref_same - prior
-        dy_next = (nxt - prior) if nxt is not None else dy_same
-        matched += 1
-        levels.append(r["idx"])
-        dy_same_l.append(dy_same)
-        dy_next_l.append(dy_next)
-        if r["delta"] is not None:
-            deltas.append((r["delta"], dy_same))
-
-    out = {"n_matched": matched}
-
-    def _spearman(xs, ys):
-        if len(xs) < 3 or len(set(xs)) < 2 or len(set(ys)) < 2:
-            return (float("nan"), float("nan"))
-        rho, p = spearmanr(xs, ys)
-        return (float(rho), float(p))
-
-    # LEVEL vs same-day move (expected weak)
-    out["level_rho"], out["level_p"] = _spearman(levels, dy_same_l)
-
-    # CHANGE vs same-day move (expected stronger) + sign agreement
-    if deltas:
-        dvals = [d for d, _ in deltas]
-        moves = [m for _, m in deltas]
-        out["delta_rho"], out["delta_p"] = _spearman(dvals, moves)
-        nonzero = [(d, m) for d, m in deltas if d != 0 and m != 0]
-        if nonzero:
-            agree = sum(1 for d, m in nonzero if (d > 0) == (m > 0))
-            out["sign_agreement"] = agree / len(nonzero)
-            out["n_sign"] = len(nonzero)
+    yields = _load_yields(conn, source)
+    by_date = {row["date"]: row for row in yields}
+    observed = [row for row in yields if row["dgs2"] is not None]
+    observed_dates = [row["date"] for row in observed]
+    events = []
+    exclusions = Counter()
+    for row in rows:
+        date = datetime.date.fromisoformat(row["date"])
+        same = by_date.get(row["date"])
+        position = bisect_left(observed_dates, row["date"])
+        prior = observed[position - 1] if position else None
+        gap = (date - datetime.date.fromisoformat(prior["date"])).days if prior else None
+        reason = None
+        if date.weekday() >= 5:
+            reason = "weekend_statement"
+        elif same is None or same["dgs2"] is None:
+            reason = "missing_same_day_dgs2"
+        elif prior is None:
+            reason = "missing_prior_dgs2"
+        elif gap > MAX_PRIOR_GAP_DAYS:
+            reason = "prior_gap_exceeds_7_days"
+        extraction, record = extraction_by_id[row["id"]]
+        event = {
+            "statement_id": row["id"], "date": row["date"], "source": source,
+            "is_synthetic": flag, "url": row["url"], "text_sha256": row["score_text_sha256"],
+            "model": extraction["model"], "schema_version": extraction["schema_version"],
+            "cache_key": extraction["cache_key"], "prompt_version": extraction["prompt_version"],
+            "extraction_created_at": extraction["created_at"],
+            "extraction_provenance": json.loads(extraction["provenance_json"]) if extraction["provenance_json"] else None,
+            "record": record, "index_value": row["index_value"], "delta_index": row["delta_index"],
+            "change_vector": json.loads(row["change_vector_json"]) if row["change_vector_json"] else None,
+            "prior_statement_id": row["prior_statement_id"], "prior_statement_date": row["prior_statement_date"],
+            "prior_yield_date": prior["date"] if prior else None,
+            "same_yield_date": same["date"] if same else None, "prior_gap_days": gap,
+            "prior_dgs2": prior["dgs2"] if prior else None,
+            "same_dgs2": same["dgs2"] if same else None,
+            "prior_dgs10": prior["dgs10"] if prior else None,
+            "same_dgs10": same["dgs10"] if same else None,
+            "delta_dgs2_bps": None, "delta_dgs10_bps": None,
+            "included": reason is None, "exclusion_reason": reason,
+        }
+        if reason is None:
+            event["delta_dgs2_bps"] = 100 * (same["dgs2"] - prior["dgs2"])
+            if same["dgs10"] is not None and prior["dgs10"] is not None:
+                event["delta_dgs10_bps"] = 100 * (same["dgs10"] - prior["dgs10"])
         else:
-            out["sign_agreement"], out["n_sign"] = float("nan"), 0
-    else:
-        out["delta_rho"] = out["delta_p"] = float("nan")
-        out["sign_agreement"], out["n_sign"] = float("nan"), 0
-
-    # save headline numbers to the results table (SQL history)
-    now = datetime.datetime.utcnow().isoformat()
-    for metric in ["level_rho", "delta_rho", "sign_agreement"]:
-        db.save_result(conn, label, metric, out.get(metric), matched, now)
-
-    _write_report(out, label, source, out_path)
+            exclusions[reason] += 1
+        events.append(event)
+    included = [event for event in events if event["included"]]
+    if not included and source == "FOMC":
+        raise ValueError("No matched real same-day yield windows; check actual DGS2 coverage")
+    changes = [event for event in included if event["delta_index"] is not None]
+    nonzero = [event for event in changes if event["delta_index"] != 0 and event["delta_dgs2_bps"] != 0]
+    agree = sum((event["delta_index"] > 0) == (event["delta_dgs2_bps"] > 0) for event in nonzero)
+    first_extraction = selected[0][1]
+    provenance = {
+        "source": source, "is_synthetic": flag, "model": first_extraction["model"],
+        "schema_version": first_extraction["schema_version"],
+        "prompt_versions": sorted({e["prompt_version"] for _, e, _, _ in selected if e["prompt_version"] is not None}),
+        "yield_series": ["DGS2", "DGS10"], "yield_unit": "percent",
+        "move_unit": "basis_points", "yield_is_synthetic": flag,
+        "window": "same_day_minus_latest_prior_observation",
+        "max_prior_gap_calendar_days": MAX_PRIOR_GAP_DAYS,
+        "method_check_only": source == "SYNTHETIC",
+    }
+    out = {
+        "label": label, "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "n_statements": len(selected), "n_scored": len(rows), "n_matched": len(included),
+        "n_excluded": len(events) - len(included), "exclusions": dict(sorted(exclusions.items())),
+        "n_level": len(included), "n_delta": len(changes), "n_sign": len(nonzero), "n_agree": agree,
+        "sign_agreement": agree / len(nonzero) if nonzero else None,
+        "provenance": provenance,
+        "coverage": {"first_statement_date": rows[0]["date"], "last_statement_date": rows[-1]["date"],
+                     "statement_dates": [row["date"] for row in rows], "complete_source_scoring": True,
+                     "n_real_statements": len(selected) if source == "FOMC" else 0,
+                     "first_yield_date": yields[0]["date"] if yields else None,
+                     "last_yield_date": yields[-1]["date"] if yields else None},
+        "events": events,
+    }
+    out["level_rho"], out["level_p"] = _spearman(
+        [event["index_value"] for event in included], [event["delta_dgs2_bps"] for event in included])
+    out["delta_rho"], out["delta_p"] = _spearman(
+        [event["delta_index"] for event in changes], [event["delta_dgs2_bps"] for event in changes])
+    denominators = {"level_rho": out["n_level"], "level_p": out["n_level"],
+                    "delta_rho": out["n_delta"], "delta_p": out["n_delta"],
+                    "sign_agreement": out["n_sign"]}
+    with conn:
+        for metric, denominator in denominators.items():
+            db.save_result(conn, label, metric, out[metric], denominator, out["created_at"],
+                           provenance=provenance, commit=False)
+        for metric in ("n_statements", "n_scored", "n_matched", "n_excluded", "n_level", "n_delta", "n_sign", "n_agree"):
+            db.save_result(conn, label, metric, out[metric], None, out["created_at"],
+                           provenance=provenance, commit=False)
+    _write_report(out, out_path)
     return out
 
 
-def _fmt(x):
-    return "n/a" if x != x else f"{x:.3f}"  # x!=x is True only for NaN
+def _fmt(value):
+    return "n/a" if value is None else f"{value:.3f}"
 
 
-def _write_report(out, label, source, path):
+def _write_report(out, path):
+    path = Path(path)
+    json_path = path.with_suffix(".json")
+    if path == json_path:
+        raise ValueError("out_path must be a Markdown/report path, not .json")
+    provenance = out["provenance"]
     lines = [
-        f"# Statement -> rate-move alignment ({label})",
-        "",
-        f"Source: `{source}`  |  statements with a usable yield window: "
-        f"{out['n_matched']}",
-        "",
-        "## Headline numbers",
-        "",
-        f"- LEVEL index vs same-day 2y move (Spearman rho): "
-        f"{_fmt(out['level_rho'])}  (p={_fmt(out['level_p'])})",
-        f"- CHANGE (delta_index) vs same-day 2y move (Spearman rho): "
-        f"{_fmt(out['delta_rho'])}  (p={_fmt(out['delta_p'])})",
-        f"- Sign agreement, change vs move: {_fmt(out.get('sign_agreement'))} "
-        f"(n={out.get('n_sign', 0)}; 0.50 = coin flip)",
-        "",
-        "## How to read this (and what NOT to claim)",
-        "",
-        "- The yield move is driven by the **surprise vs expectations**, not the",
-        "  absolute stance. So a weak LEVEL correlation is expected, not a failure.",
-        "  The CHANGE signal is a rough surprise proxy and should do better.",
-        "- N is tiny. Treat these as **descriptive** associations. The p-values are",
-        "  shown for honesty, not to claim significance.",
-        "- The statement is only part of the news on a meeting day (press conference,",
-        "  projections). I scored the statement only, by design.",
+        f"# Same-day statement/yield association ({out['label']})", "",
+        f"Source: `{provenance['source']}`; model: `{provenance['model']}`; schema: `{provenance['schema_version']}`.",
+        f"Coverage: {out['coverage']['first_statement_date']} through {out['coverage']['last_statement_date']}; "
+        f"{out['n_scored']}/{out['n_statements']} statements scored; {out['n_matched']} matched; {out['n_excluded']} excluded.",
+        "", "## Descriptive metrics", "",
+        f"- LEVEL vs same-day DGS2 move: Spearman rho={_fmt(out['level_rho'])}, p={_fmt(out['level_p'])}; n={out['n_level']}.",
+        f"- CHANGE vs same-day DGS2 move: Spearman rho={_fmt(out['delta_rho'])}, p={_fmt(out['delta_p'])}; n={out['n_delta']}.",
+        f"- Nonzero sign agreement: {_fmt(out['sign_agreement'])}; {out['n_agree']}/{out['n_sign']} agree.",
+        "", "## Window and interpretation", "",
+        "- Daily DGS2 percent yields; movement is 100 × (same-day minus latest prior observation), in basis points.",
+        "- Only weekday statements with same-day DGS2 and a prior observation within seven calendar days are included. No next-day substitution.",
+        "- Level uses every matched event; change excludes the first statement; sign agreement additionally excludes zero changes or zero moves.",
+        "- These are descriptive contemporaneous associations, not event surprises, forecasts, causal estimates, or intraday reactions.",
+        "- The index includes the realized rate action, which confounds any language-only interpretation. Changes between statements are not measured market surprises.",
+        "- Daily yields also reflect other news, press conferences and projections. Small-sample p-values are exploratory, not validation claims.",
+        "- Spearman metrics are undefined for fewer than three pairs or constant inputs; JSON represents undefined metrics as null.",
     ]
-    with open(path, "w") as f:
-        f.write("\n".join(lines) + "\n")
+    if provenance["method_check_only"]:
+        lines += ["- SYNTHETIC METHOD CHECK ONLY: generated associations are not evidence about actual FOMC statements or markets."]
+    lines += ["", "## Exclusions", ""]
+    lines += [f"- {reason}: {count}" for reason, count in out["exclusions"].items()] or ["- None."]
+    lines += ["", "## Per-event audit", "", f"Full records, extraction provenance and yield observations: `{json_path.name}`.", "",
+              "| Date | Index | Change | Prior yield date | Prior DGS2 | Same DGS2 | Move (bp) | Status |",
+              "|---|---:|---:|---|---:|---:|---:|---|"]
+    for event in out["events"]:
+        lines.append(f"| {event['date']} | {_fmt(event['index_value'])} | {_fmt(event['delta_index'])} | "
+                     f"{event['prior_yield_date'] or 'n/a'} | {_fmt(event['prior_dgs2'])} | {_fmt(event['same_dgs2'])} | "
+                     f"{_fmt(event['delta_dgs2_bps'])} | {event['exclusion_reason'] or 'included'} |")
+    payload = json.dumps(out, indent=2, allow_nan=False) + "\n"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    json_path.write_text(payload, encoding="utf-8")

@@ -1,0 +1,857 @@
+{
+  "schema_version": "v1",
+  "prompt_version": "fomc-text-v3",
+  "model": "session-default-model (id not exposed by completion helper)",
+  "created_at": "2026-10-30T07:32:25.206847+00:00",
+  "provenance": {
+    "provider": "agent session completion(model='default')",
+    "outcome_blind": true,
+    "yields_provided": false,
+    "retried_after_invalid_output": {
+      "2022-09-21": 2
+    },
+    "notes": "Earlier full pass under prompt v2 retained only for stability comparison; quote cap raised 40->60 words after a deterministic conflict on a two-dissenter statement, before any yield data was examined."
+  },
+  "records": [
+    {
+      "date": "2021-01-27",
+      "text_sha256": "6ab84255a5bd77b3fa6433e76229c0bd1b76fe2bb3391af81572486a28a30638",
+      "record": {
+        "inflation_stance": "too_low",
+        "growth_labor_stance": "slowing",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "easing_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "With inflation running persistently below this longer-run goal, the Committee will aim to achieve inflation moderately above 2 percent for some time",
+          "growth_labor_stance": "The pace of the recovery in economic activity and employment has moderated in recent months, with weakness concentrated in the sectors most adversely affected by the pandemic.",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "the Federal Reserve will continue to increase its holdings of Treasury securities by at least $80 billion per month and of agency mortgage‑backed securities by at least $40 billion per month",
+          "forward_guidance": "The Committee expects to maintain an accommodative stance of monetary policy until these outcomes are achieved.",
+          "dissent_direction": "Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Thomas I. Barkin; Raphael W. Bostic; Michelle W. Bowman; Lael Brainard; Richard H. Clarida; Mary C. Daly; Charles L. Evans; Randal K. Quarles; and Christopher J. Waller."
+        }
+      }
+    },
+    {
+      "date": "2021-03-17",
+      "text_sha256": "4e9cf6ffd0401956968edf375cb98df51dc8c71a3f9cec60bb8d5fe1cb477066",
+      "record": {
+        "inflation_stance": "too_low",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "easing_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "With inflation running persistently below this longer-run goal, the Committee will aim to achieve inflation moderately above 2 percent for some time",
+          "growth_labor_stance": "Following a moderation in the pace of the recovery, indicators of economic activity and employment have turned up recently, although the sectors most adversely affected by the pandemic remain weak.",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "the Federal Reserve will continue to increase its holdings of Treasury securities by at least $80 billion per month and of agency mortgage‑backed securities by at least $40 billion per month",
+          "forward_guidance": "The Committee expects to maintain an accommodative stance of monetary policy until these outcomes are achieved.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2021-04-28",
+      "text_sha256": "819998d4e019833f481f231eccfadf5746598e966658fbe59aede3d5c3d4d711",
+      "record": {
+        "inflation_stance": "firming",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation has risen, largely reflecting transitory factors.",
+          "growth_labor_stance": "indicators of economic activity and employment have strengthened. The sectors most adversely affected by the pandemic remain weak but have shown improvement.",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "the Federal Reserve will continue to increase its holdings of Treasury securities by at least $80 billion per month and of agency mortgage‑backed securities by at least $40 billion per month",
+          "forward_guidance": "The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2021-06-16",
+      "text_sha256": "66d1468c689133e57aee1a73c49fd15fb03eb28d6d2703e820074bc6f63c3f64",
+      "record": {
+        "inflation_stance": "firming",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation has risen, largely reflecting transitory factors.",
+          "growth_labor_stance": "indicators of economic activity and employment have strengthened.",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "the Federal Reserve will continue to increase its holdings of Treasury securities by at least $80 billion per month and of agency mortgage‑backed securities by at least $40 billion per month",
+          "forward_guidance": "The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2021-07-28",
+      "text_sha256": "b9b48791561705bb6b13766a7f4388b579f4a65865d0bbd7ede490a62ed6b8ed",
+      "record": {
+        "inflation_stance": "firming",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "easing_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation has risen, largely reflecting transitory factors.",
+          "growth_labor_stance": "indicators of economic activity and employment have continued to strengthen.",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "the Committee indicated that it would continue to increase its holdings of Treasury securities by at least $80 billion per month and of agency mortgage‑backed securities by at least $40 billion per month",
+          "forward_guidance": "The Committee expects to maintain an accommodative stance of monetary policy until these outcomes are achieved.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2021-09-22",
+      "text_sha256": "b35fe17877667e20d00dcf884d89ab765e023c19815ea32315a65ef4f90cdb94",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "easing_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation is elevated, largely reflecting transitory factors.",
+          "growth_labor_stance": "indicators of economic activity and employment have continued to strengthen",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "the Committee indicated that it would continue to increase its holdings of Treasury securities by at least $80 billion per month and of agency mortgage‑backed securities by at least $40 billion per month",
+          "forward_guidance": "The Committee expects to maintain an accommodative stance of monetary policy until these outcomes are achieved.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2021-11-03",
+      "text_sha256": "45ddb971bf630503d734b76bff2a13c808e059efe773e7581f694c535d6817a2",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation is elevated, largely reflecting factors that are expected to be transitory.",
+          "growth_labor_stance": "indicators of economic activity and employment have continued to strengthen.",
+          "rate_action": "The Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent",
+          "balance_sheet": "Beginning later this month, the Committee will increase its holdings of Treasury securities by at least $70 billion per month and of agency mortgage‑backed securities by at least $35 billion per month.",
+          "forward_guidance": "The Committee judges that similar reductions in the pace of net asset purchases will likely be appropriate each month, but it is prepared to adjust the pace of purchases if warranted by changes in the economic outlook.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2021-12-15",
+      "text_sha256": "68eb32eece26c2fed754e2a03d14bdec82f1b790aa2e089d5baded1a087e564c",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Supply and demand imbalances related to the pandemic and the reopening of the economy have continued to contribute to elevated levels of inflation.",
+          "growth_labor_stance": "Job gains have been solid in recent months, and the unemployment rate has declined substantially.",
+          "rate_action": "the Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent.",
+          "balance_sheet": "Beginning in January, the Committee will increase its holdings of Treasury securities by at least $40 billion per month and of agency mortgage‑backed securities by at least $20 billion per month.",
+          "forward_guidance": "The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2022-01-26",
+      "text_sha256": "19796da63c960262e03003e8451675b94c697f7ab5e0c0c90407b06379981694",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "strong",
+        "rate_action": "hold",
+        "balance_sheet": "expanding",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Supply and demand imbalances related to the pandemic and the reopening of the economy have continued to contribute to elevated levels of inflation.",
+          "growth_labor_stance": "Indicators of economic activity and employment have continued to strengthen.",
+          "rate_action": "the Committee decided to keep the target range for the federal funds rate at 0 to 1/4 percent.",
+          "balance_sheet": "Beginning in February, the Committee will increase its holdings of Treasury securities by at least $20 billion per month and of agency mortgage‑backed securities by at least $10 billion per month.",
+          "forward_guidance": "With inflation well above 2 percent and a strong labor market, the Committee expects it will soon be appropriate to raise the target range for the federal funds rate.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2022-03-16",
+      "text_sha256": "846ada4dcab9a8be7a00e57ce1b7984490f0d2fbcc463bb8afbe1d48e6118333",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "strong",
+        "rate_action": "hike_25",
+        "balance_sheet": "neutral",
+        "forward_guidance": "tightening_bias",
+        "dissent_direction": "hawkish",
+        "dissent_count": 1,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher energy prices, and broader price pressures.",
+          "growth_labor_stance": "Job gains have been strong in recent months, and the unemployment rate has declined substantially.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 1/4 to 1/2 percent",
+          "balance_sheet": "the Committee expects to begin reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities at a coming meeting.",
+          "forward_guidance": "anticipates that ongoing increases in the target range will be appropriate",
+          "dissent_direction": "Voting against this action was James Bullard, who preferred at this meeting to raise the target range for the federal funds rate by 0.5 percentage point to 1/2 to 3/4 percent."
+        }
+      }
+    },
+    {
+      "date": "2022-05-04",
+      "text_sha256": "5a6678c96caefe585baaa663b1dfa59fe6fb66082d72417c7e6a778b80087b32",
+      "record": {
+        "balance_sheet": "runoff",
+        "dissent_count": 0,
+        "dissent_direction": "none",
+        "forward_guidance": "tightening_bias",
+        "growth_labor_stance": "strong",
+        "inflation_stance": "elevated",
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher energy prices, and broader price pressures.",
+          "growth_labor_stance": "Job gains have been robust in recent months, and the unemployment rate has declined substantially.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 3/4 to 1 percent",
+          "balance_sheet": "the Committee decided to begin reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities on June 1",
+          "forward_guidance": "anticipates that ongoing increases in the target range will be appropriate",
+          "dissent_direction": ""
+        },
+        "rate_action": "hike_50plus"
+      }
+    },
+    {
+      "date": "2022-06-15",
+      "text_sha256": "b724ff226fa248f9acf3cc2abf224dcd404b14f2590bf2757be18ff3084f09aa",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "strong",
+        "rate_action": "hike_50plus",
+        "balance_sheet": "runoff",
+        "forward_guidance": "tightening_bias",
+        "dissent_direction": "hawkish",
+        "dissent_count": 1,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher energy prices, and broader price pressures.",
+          "growth_labor_stance": "Job gains have been robust in recent months, and the unemployment rate has remained low.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 1‑1/2 to 1-3/4 percent",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities",
+          "forward_guidance": "anticipates that ongoing increases in the target range will be appropriate",
+          "dissent_direction": "Voting against this action was Esther L. George, who preferred at this meeting to raise the target range for the federal funds rate by 0.5 percentage point to 1-1/4 percent to 1-1/2 percent."
+        }
+      }
+    },
+    {
+      "date": "2022-07-27",
+      "text_sha256": "965fda9f22ea0801d8133697c585a65c4b08a2d71f1e17036a31faed79ab555d",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "slowing",
+        "rate_action": "hike_50plus",
+        "balance_sheet": "runoff",
+        "forward_guidance": "tightening_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher food and energy prices, and broader price pressures.",
+          "growth_labor_stance": "Recent indicators of spending and production have softened.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 2-1/4 to 2-1/2 percent",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities",
+          "forward_guidance": "anticipates that ongoing increases in the target range will be appropriate",
+          "dissent_direction": "Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Michael S. Barr; Michelle W. Bowman; Lael Brainard; James Bullard; Susan M. Collins; Lisa D. Cook; Esther L. George; Philip N. Jefferson; Loretta J. Mester; and Christopher J. Waller."
+        }
+      }
+    },
+    {
+      "date": "2022-09-21",
+      "text_sha256": "06e5a8354e382c96f313e3d1895fb31db907128420e94f88fa4865a2df92b2b2",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hike_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "tightening_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher food and energy prices, and broader price pressures.",
+          "growth_labor_stance": "Recent indicators point to modest growth in spending and production.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 3 to 3-1/4 percent",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities",
+          "forward_guidance": "anticipates that ongoing increases in the target range will be appropriate",
+          "dissent_direction": "Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Michael S. Barr; Michelle W. Bowman; Lael Brainard; James Bullard; Susan M. Collins; Lisa D. Cook; Esther L. George; Philip N. Jefferson; Loretta J. Mester; and Christopher J. Waller."
+        }
+      }
+    },
+    {
+      "date": "2022-11-02",
+      "text_sha256": "7bbc0604d0692f0d716bc21f9681d4eb114b0df724a6eccd17f2a62ffe347542",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hike_50plus",
+        "balance_sheet": "runoff",
+        "forward_guidance": "tightening_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher food and energy prices, and broader price pressures.",
+          "growth_labor_stance": "Recent indicators point to modest growth in spending and production.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 3-3/4 to 4 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities",
+          "forward_guidance": "The Committee anticipates that ongoing increases in the target range will be appropriate in order to attain a stance of monetary policy that is sufficiently restrictive to return inflation to 2 percent over time.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2022-12-14",
+      "text_sha256": "bb0535ab50fac691ac64ebb32f0aadb5c870df31eefb7cbcfc6700da1d545a5f",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hike_50plus",
+        "balance_sheet": "runoff",
+        "forward_guidance": "tightening_bias",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher food and energy prices, and broader price pressures.",
+          "growth_labor_stance": "Recent indicators point to modest growth in spending and production.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities",
+          "forward_guidance": "The Committee anticipates that ongoing increases in the target range will be appropriate in order to attain a stance of monetary policy that is sufficiently restrictive to return inflation to 2 percent over time.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-02-01",
+      "text_sha256": "f4c5a957d946808ec6f4adeefbc8222149e672afde7ce905edb811e2e5a644e1",
+      "record": {
+        "balance_sheet": "runoff",
+        "dissent_count": 0,
+        "dissent_direction": "none",
+        "forward_guidance": "tightening_bias",
+        "growth_labor_stance": "moderate",
+        "inflation_stance": "elevated",
+        "quotes": {
+          "inflation_stance": "Inflation has eased somewhat but remains elevated.",
+          "growth_labor_stance": "Recent indicators point to modest growth in spending and production.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 4-1/2 to 4-3/4 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "The Committee anticipates that ongoing increases in the target range will be appropriate in order to attain a stance of monetary policy that is sufficiently restrictive to return inflation to 2 percent over time.",
+          "dissent_direction": ""
+        },
+        "rate_action": "hike_25"
+      }
+    },
+    {
+      "date": "2023-03-22",
+      "text_sha256": "aa8ca574dd1163588d78f077413d92bcc782625c69cb805d7e1aec2035fa3aa9",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hike_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated.",
+          "growth_labor_stance": "Recent indicators point to modest growth in spending and production.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 4-3/4 to 5 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "The Committee anticipates that some additional policy firming may be appropriate in order to attain a stance of monetary policy that is sufficiently restrictive to return inflation to 2 percent over time.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-05-03",
+      "text_sha256": "4c08bc5baf707099674e5c0e56dd28bd067ef38f243437f8fb7daeb11942a511",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hike_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated.",
+          "growth_labor_stance": "Economic activity expanded at a modest pace in the first quarter.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 5 to 5-1/4 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In determining the extent to which additional policy firming may be appropriate to return inflation to 2 percent over time, the Committee will take into account the cumulative tightening of monetary policy",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-06-14",
+      "text_sha256": "a97291a37deaf6a768fe992e3ffc2c43f70a351e4ce9902964d91560724d02c6",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a modest pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5 to 5-1/4 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In determining the extent of additional policy firming that may be appropriate to return inflation to 2 percent over time, the Committee will take into account the cumulative tightening of monetary policy",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-07-26",
+      "text_sha256": "e49c67b920c102de7dbfeb2891161a2ea4f877ea7b66e3a4680962f6abe85310",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hike_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has been expanding at a moderate pace.",
+          "rate_action": "the Committee decided to raise the target range for the federal funds rate to 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In determining the extent of additional policy firming that may be appropriate to return inflation to 2 percent over time, the Committee will take into account the cumulative tightening of monetary policy",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-09-20",
+      "text_sha256": "6d7e201b36c4bc5649198d4393edde9d6c300fb27da4d5a4e6758ec7a4cced44",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has been expanding at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In determining the extent of additional policy firming that may be appropriate to return inflation to 2 percent over time, the Committee will take into account the cumulative tightening of monetary policy",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-11-01",
+      "text_sha256": "e047b1f9c5a67dbfac1a1479b5b715951015a62740b66c873568ecdad5fa55dc",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "strong",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity expanded at a strong pace in the third quarter.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In determining the extent of additional policy firming that may be appropriate to return inflation to 2 percent over time, the Committee will take into account the cumulative tightening of monetary policy, the lags with which monetary policy affects economic activity and inflation, and economic and financial developments.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2023-12-13",
+      "text_sha256": "cb3c2936c31a2865e4e7158ec2c5a111c635452560af8816ac18c2076baff268",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "lean_tightening",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation has eased over the past year but remains elevated.",
+          "growth_labor_stance": "Job gains have moderated since earlier in the year but remain strong, and the unemployment rate has remained low.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In determining the extent of any additional policy firming that may be appropriate to return inflation to 2 percent over time, the Committee will take into account the cumulative tightening of monetary policy",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2024-01-31",
+      "text_sha256": "f86e390835f45014f4c63a4d6b087ce86b501c81bb31d4ff03d36547c8d3db2d",
+      "record": {
+        "balance_sheet": "runoff",
+        "dissent_count": 0,
+        "dissent_direction": "none",
+        "forward_guidance": "neutral",
+        "growth_labor_stance": "solid",
+        "inflation_stance": "elevated",
+        "quotes": {
+          "inflation_stance": "Inflation has eased over the past year but remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has been expanding at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In considering any adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        },
+        "rate_action": "hold"
+      }
+    },
+    {
+      "date": "2024-03-20",
+      "text_sha256": "c1877288abf406154111fb6abaef3848f0e9113574be0694fad03309abf490af",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_count": 0,
+        "dissent_direction": "none",
+        "quotes": {
+          "inflation_stance": "Inflation has eased over the past year but remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has been expanding at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage-backed securities, as described in its previously announced plans.",
+          "forward_guidance": "In considering any adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2024-05-01",
+      "text_sha256": "370a9090c90b3c5a1e39cd1a63bc72802a032a8852bf547020068ea83204e649",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation has eased over the past year but remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering any adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2024-06-12",
+      "text_sha256": "b19bff9003eb888dce43926598ed54a1d3492c13dcc8a8517735957473bde166",
+      "record": {
+        "balance_sheet": "runoff",
+        "dissent_count": 0,
+        "dissent_direction": "none",
+        "forward_guidance": "neutral",
+        "growth_labor_stance": "solid",
+        "inflation_stance": "elevated",
+        "quotes": {
+          "inflation_stance": "Inflation has eased over the past year but remains elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering any adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        },
+        "rate_action": "hold"
+      }
+    },
+    {
+      "date": "2024-07-31",
+      "text_sha256": "68d3ea69c406f76de3891ac7fee8b7f7ac5faf949cea40f90483564d703b3527",
+      "record": {
+        "balance_sheet": "runoff",
+        "dissent_count": 0,
+        "dissent_direction": "none",
+        "forward_guidance": "neutral",
+        "growth_labor_stance": "solid",
+        "inflation_stance": "elevated",
+        "quotes": {
+          "inflation_stance": "Inflation has eased over the past year but remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 5-1/4 to 5-1/2 percent.",
+          "balance_sheet": "the Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering any adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        },
+        "rate_action": "hold"
+      }
+    },
+    {
+      "date": "2024-09-18",
+      "text_sha256": "30c9ae609422ea59acdf298a196f202720594b01f68c936d748b2d9e84016b54",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "cut_50plus",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "hawkish",
+        "dissent_count": 1,
+        "quotes": {
+          "inflation_stance": "Inflation has made further progress toward the Committee's 2 percent objective but remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to lower the target range for the federal funds rate by 1/2 percentage point to 4-3/4 to 5 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Voting against this action was Michelle W. Bowman, who preferred to lower the target range for the federal funds rate by 1/4 percentage point at this meeting."
+        }
+      }
+    },
+    {
+      "date": "2024-11-07",
+      "text_sha256": "e801bed399af067bdc41ecccc32db48d3091710c4cf6d29f581bd92fe8d5973d",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "cut_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation has made progress toward the Committee's 2 percent objective but remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to lower the target range for the federal funds rate by 1/4 percentage point to 4-1/2 to 4-3/4 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2024-12-18",
+      "text_sha256": "f6d7e0f0534cb888392d9fe5bfb261ce6bf4dc8dbc5c7144eb9d848c55029d45",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "cut_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "hawkish",
+        "dissent_count": 1,
+        "quotes": {
+          "inflation_stance": "Inflation has made progress toward the Committee's 2 percent objective but remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to lower the target range for the federal funds rate by 1/4 percentage point to 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Voting against the action was Beth M. Hammack, who preferred to maintain the target range for the federal funds rate at 4-1/2 to 4-3/4 percent."
+        }
+      }
+    },
+    {
+      "date": "2025-01-29",
+      "text_sha256": "7303e66b27a0ebfd8dae27d050b07f2a5247d99e42afc95d05cf5b35b46e1e3e",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2025-03-19",
+      "text_sha256": "c1ab1027284281cc907bfa154154e6446980b06b4c87439cbc37b298ebbedea3",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "hawkish",
+        "dissent_count": 1,
+        "quotes": {
+          "inflation_stance": "Inflation remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Voting against this action was Christopher J. Waller, who supported no change for the federal funds target range but preferred to continue the current pace of decline in securities holdings."
+        }
+      }
+    },
+    {
+      "date": "2025-05-07",
+      "text_sha256": "a8b688e44db8985c52bac65d0bb83b164a90813c0d0d024e0c1431bea3d69bf3",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains somewhat elevated.",
+          "growth_labor_stance": "recent indicators suggest that economic activity has continued to expand at a solid pace.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2025-06-18",
+      "text_sha256": "d0a46006984ba41d1544d577c9bb4642a5c04d8de2c50dc9366317a469798161",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "solid",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 0,
+        "quotes": {
+          "inflation_stance": "Inflation remains somewhat elevated.",
+          "growth_labor_stance": "recent indicators suggest that economic activity has continued to expand at a solid pace. The unemployment rate remains low, and labor market conditions remain solid.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": ""
+        }
+      }
+    },
+    {
+      "date": "2025-07-30",
+      "text_sha256": "d942a147ec09eb6c225df1c4f7bb11f94e0ec076c68d1f8bd3773f6762a60b7a",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "hold",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "dovish",
+        "dissent_count": 2,
+        "quotes": {
+          "inflation_stance": "Inflation remains somewhat elevated.",
+          "growth_labor_stance": "recent indicators suggest that growth of economic activity moderated in the first half of the year.",
+          "rate_action": "the Committee decided to maintain the target range for the federal funds rate at 4-1/4 to 4-1/2 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Voting against this action were Michelle W. Bowman and Christopher J. Waller, who preferred to lower the target range for the federal funds rate by 1/4 percentage point at this meeting."
+        }
+      }
+    },
+    {
+      "date": "2025-09-17",
+      "text_sha256": "f026adc32243d0528f08650c5f1e25dba97577d5280f426261d1cc6a5cabf220",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "cut_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "dovish",
+        "dissent_count": 1,
+        "quotes": {
+          "inflation_stance": "Inflation has moved up and remains somewhat elevated.",
+          "growth_labor_stance": "Recent indicators suggest that growth of economic activity moderated in the first half of the year.",
+          "rate_action": "the Committee decided to lower the target range for the federal funds rate by 1/4 percentage point to 4 to 4‑1/4 percent.",
+          "balance_sheet": "The Committee will continue reducing its holdings of Treasury securities and agency debt and agency mortgage‑backed securities.",
+          "forward_guidance": "In considering additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Voting against this action was Stephen I. Miran, who preferred to lower the target range for the federal funds rate by 1/2 percentage point at this meeting."
+        }
+      }
+    },
+    {
+      "date": "2025-10-29",
+      "text_sha256": "d9af1ebb577a4ab3714062fac8b4f2135218de69c984c2355658f03c625632c5",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "cut_25",
+        "balance_sheet": "runoff",
+        "forward_guidance": "neutral",
+        "dissent_direction": "none",
+        "dissent_count": 2,
+        "quotes": {
+          "inflation_stance": "Inflation has moved up since earlier in the year and remains somewhat elevated.",
+          "growth_labor_stance": "Available indicators suggest that economic activity has been expanding at a moderate pace.",
+          "rate_action": "the Committee decided to lower the target range for the federal funds rate by 1/4 percentage point to 3-3/4 to 4 percent.",
+          "balance_sheet": "The Committee decided to conclude the reduction of its aggregate securities holdings on December 1.",
+          "forward_guidance": "In considering additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Voting against this action were Stephen I. Miran, who preferred to lower the target range for the federal funds rate by 1/2 percentage point at this meeting, and Jeffrey R. Schmid, who preferred no change to the target range for the federal funds rate at this meeting."
+        }
+      }
+    },
+    {
+      "date": "2025-12-10",
+      "text_sha256": "167d2324c58e88d23ceefc9bf44c4d76b76cf659740a86cc5eddbaeb33e932bf",
+      "record": {
+        "inflation_stance": "elevated",
+        "growth_labor_stance": "moderate",
+        "rate_action": "cut_25",
+        "balance_sheet": "expanding",
+        "forward_guidance": "neutral",
+        "dissent_direction": "hawkish",
+        "dissent_count": 3,
+        "quotes": {
+          "inflation_stance": "Inflation has moved up since earlier in the year and remains somewhat elevated.",
+          "growth_labor_stance": "Available indicators suggest that economic activity has been expanding at a moderate pace.",
+          "rate_action": "the Committee decided to lower the target range for the federal funds rate by 1/4 percentage point to 3-1/2 to 3‑3/4 percent.",
+          "balance_sheet": "will initiate purchases of shorter-term Treasury securities as needed to maintain an ample supply of reserves on an ongoing basis.",
+          "forward_guidance": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.",
+          "dissent_direction": "Austan D. Goolsbee and Jeffrey R. Schmid, who preferred no change to the target range for the federal funds rate at this meeting."
+        }
+      }
+    }
+  ]
+}
